@@ -29,6 +29,8 @@ define( 'OS_DIRSEP',	DIRECTORY_SEPARATOR );
 define( 'OS_PATHSEP',	PATH_SEPARATOR );
 */
 
+//------------------------------------------------------------------------------
+
 function dirname(path) {
 	return path.slice(0,path.lastIndexOf('/')+1);
 }
@@ -47,6 +49,8 @@ function htmlspecialchars( text ) { // PHP string htmlspecialchars ( string $str
 	);
 }
 
+//------------------------------------------------------------------------------
+
 function __e() {
 	for(var i in arguments) {
 		var argument = arguments[i];
@@ -61,11 +65,12 @@ function __e() {
 
 const SCRIPT_HREF = window.location.href;
 const SERVER_NAME = window.location.hostname;
-const SCRIPT_NAME = window.location.pathname; //window.location.href.slice(window.location.protocol.length+2+window.location.hostname.length);
+const SCRIPT_NAME = window.location.pathname;
 const SCRIPT_PATH = dirname(SCRIPT_NAME);
 const SCRIPT_FILE = basename(SCRIPT_NAME);
-const SCRIPT_ONLY = basename(SCRIPT_NAME,'.html');
-const QUERY_STRING = SCRIPT_HREF.slice(window.location.protocol.length+2+SERVER_NAME.length+SCRIPT_NAME.length);
+const SCRIPT_BASE = basename(SCRIPT_NAME,'.html');
+const SEARCH_LINE = window.location.search;
+const SCRIPT_HASH = window.location.hash;
 
 //------------------------------------------------------------------------------
 
@@ -79,7 +84,7 @@ const _dico = {
 //------------------------------------------------------------------------------
 
 function __(word, dico) {
-	if(_dico[word]) return _dico[word]; else return word;
+	if(dico[word]) return dico[word]; else return word;
 }
 
 //------------------------------------------------------------------------------

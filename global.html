@@ -11,21 +11,29 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+	<link rel="stylesheet" href="/global.css" />
 	<script src="/global.js"></script>
 </head>
 <body>
 
 <div class="container">
-	<h1><script>__e(title);</script></h1>
-	<hr />
-	<script>__e_url_chain();</script>
-	<p>SCRIPT_HREF <script>document.write(SCRIPT_HREF);</script></p>
-	<p>SERVER_NAME <script>document.write(SERVER_NAME);</script></p>
-	<p>SCRIPT_NAME <script>document.write(SCRIPT_NAME);</script></p>
-	<p>SCRIPT_PATH <script>document.write(SCRIPT_PATH);</script></p>
-	<p>SCRIPT_FILE <script>document.write(SCRIPT_FILE);</script></p>
-	<p>SCRIPT_ONLY <script>document.write(SCRIPT_ONLY);</script></p>
-	<p>QUERY_STRING <script>document.write(QUERY_STRING);</script></p>
+
+	<div class="border border-primary rounded rounded-xs jm-border-header">
+		<h1><script>__e(title);</script></h1>
+		<script>__e_url_chain();</script>
+	</div>
+
+	<table class="table table-bordered table-hover">
+	<tr><th scope="tr">SCRIPT_HREF</th><td><script>document.write(SCRIPT_HREF);</script></td></tr>
+	<tr><th scope="tr">SERVER_NAME</th><td><script>document.write(SERVER_NAME);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_NAME</th><td><script>document.write(SCRIPT_NAME);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_PATH</th><td><script>document.write(SCRIPT_PATH);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_FILE</th><td><script>document.write(SCRIPT_FILE);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_BASE</th><td><script>document.write(SCRIPT_BASE);</script></td></tr>
+	<tr><th scope="tr">SEARCH_LINE</th><td><script>document.write(SEARCH_LINE);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_HASH</th><td><script>document.write(SCRIPT_HASH);</script></td></tr>
+	</table>
+
 </div>
 
 </body>
