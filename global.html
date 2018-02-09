@@ -10,14 +10,27 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 	<script src="/global.js"></script>
+
+	<script>
+		const title = SCRIPT_FILE;
+		document.title = title;
+	</script>
+
 </head>
 <body>
 
 <div class="container">
 	<h1><script>__e(title);</script></h1>
 	<hr />
-	<script>__e_url_chain();</script>
-	<p><a href="fr/">Français</a></p>
+	<p>&gt; <a href=".">jmparatte.github.io</a></p>
+	<p><a href="fr">Français</a></p>
+	<p>SCRIPT_HREF <script>document.write(SCRIPT_HREF);</script></p>
+	<p>SERVER_NAME <script>document.write(SERVER_NAME);</script></p>
+	<p>SCRIPT_NAME <script>document.write(SCRIPT_NAME);</script></p>
+	<p>SCRIPT_PATH <script>document.write(SCRIPT_PATH);</script></p>
+	<p>SCRIPT_FILE <script>document.write(SCRIPT_FILE);</script></p>
+	<p>SCRIPT_ONLY <script>document.write(SCRIPT_ONLY);</script></p>
+	<p>QUERY_STRING <script>document.write(QUERY_STRING);</script></p>
 </div>
 
 </body>

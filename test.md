@@ -1,3 +1,0 @@
-# TEST-MD
-
-test.md
