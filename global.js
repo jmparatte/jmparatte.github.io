@@ -70,9 +70,8 @@ const QUERY_STRING = SCRIPT_HREF.slice(window.location.protocol.length+2+SERVER_
 //------------------------------------------------------------------------------
 
 const _dico = {
-	'jmparatte.github.io': "Top",
-	'jmparatte-github-io': "Top",
-	'fr': "Français",
+	'' : "Home",
+	'fr': "FR",
 	'workshop' : "Atelier",
 	'workshops' : "Ateliers"
 };
@@ -85,15 +84,19 @@ function __(word, dico) {
 
 //------------------------------------------------------------------------------
 
-//	<p>&gt; <a href="../../.."><script>__e(SERVER_NAME);</script></a> &gt; <a href="../..">Français</a> &gt; <a href="..">Ateliers</a> &gt; <a href=".">Arduino, déverminage et multi-tâche</a></p>
-
 function __e_url_chain() {
-	var dirnames = (SCRIPT_PATH.length ? SCRIPT_PATH.split('/').slice(1,-1) : []);
+	var dirnames = (SCRIPT_NAME.length ? SCRIPT_NAME.split('/') : []);
 	var terms = [];
 	terms = terms.concat(['<p>']);
-	terms = terms.concat([' > ','<a href="'+'/'+'">',__(SERVER_NAME,_dico),'</a>']);
-	for(var i=0; i<dirnames.length; i++)
-		terms = terms.concat([' > ','<a href="'+'/'+dirnames.slice(0,i+1).join('/')+'/'+'">',__(decodeURI(dirnames[i]),_dico),'</a>']);
+	for(var i=0; i<dirnames.length-(dirnames[dirnames.length-1].length==0?1:0); i++)
+		terms = terms.concat(
+			[
+				' > ',
+				'<a href="'+'/'+dirnames.slice(1,i+1).join('/')+(i>0 && i<dirnames.length-1 ? '/' : '')+'">',
+				__(decodeURI(dirnames[i]),_dico),
+				'</a>'
+			]
+		);
 	terms = terms.concat(['</p>',"\n"]);
 	__e.apply(this, terms);
 }

@@ -1,0 +1,15 @@
+
+h1 {
+	font-weight: bold;
+}
+
+h6 {
+	font-weight: bold;
+}
+
+.jm-border-header {
+	border-width: 2px !important;
+	margin:1em -1em;
+	padding:0 1em;
+}
+
