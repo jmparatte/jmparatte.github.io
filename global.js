@@ -63,6 +63,8 @@ function __e() {
 
 //------------------------------------------------------------------------------
 
+// https://www.w3schools.com/jsref/obj_location.asp
+
 const SCRIPT_HREF = window.location.href;
 const SERVER_NAME = window.location.hostname;
 const SCRIPT_NAME = window.location.pathname;
@@ -92,7 +94,7 @@ function __(word, dico) {
 function __e_url_chain() {
 	var dirnames = (SCRIPT_NAME.length ? SCRIPT_NAME.split('/') : []);
 	var terms = [];
-	terms = terms.concat(['<p>']);
+//	terms = terms.concat(['<p>']);
 	for(var i=0; i<dirnames.length-(dirnames[dirnames.length-1].length==0?1:0); i++)
 		terms = terms.concat(
 			[
@@ -102,7 +104,7 @@ function __e_url_chain() {
 				'</a>'
 			]
 		);
-	terms = terms.concat(['</p>',"\n"]);
+//	terms = terms.concat(['</p>',"\n"]);
 	__e.apply(this, terms);
 }
 
