@@ -54,7 +54,7 @@ function htmlspecialchars( text ) { // PHP string htmlspecialchars ( string $str
 function __e() {
 	for(var i in arguments) {
 		var argument = arguments[i];
-		if(argument.substr(0,1)=='<' && argument.substr(-1)=='>')
+		if(argument.length>0 && argument.substr(0,1)=='<' && argument.substr(-1)=='>')
 			document.write(argument);
 		else
 			document.write(htmlspecialchars(argument));
@@ -102,6 +102,18 @@ function __e_url_chain() {
 			'</a>'
 		]);
 	__e.apply(this, terms);
+}
+
+//------------------------------------------------------------------------------
+
+function __locale_gmt(date) {
+	var tz = date.getTimezoneOffset();
+	return (
+		date.toLocaleString()+' '+'GMT'+(tz<0?'+':'-')+
+		(Math.trunc(Math.abs(tz)/60)/100).toFixed(2).substr(-2)+
+		':'+
+		(Math.abs(tz)%60/100).toFixed(2).substr(-2)
+	);
 }
 
 //------------------------------------------------------------------------------
