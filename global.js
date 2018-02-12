@@ -94,17 +94,13 @@ function __(word, dico) {
 function __e_url_chain() {
 	var dirnames = (SCRIPT_NAME.length ? SCRIPT_NAME.split('/') : []);
 	var terms = [];
-//	terms = terms.concat(['<p>']);
 	for(var i=0; i<dirnames.length-(dirnames[dirnames.length-1].length==0?1:0); i++)
-		terms = terms.concat(
-			[
-				' > ',
-				'<a href="'+'/'+dirnames.slice(1,i+1).join('/')+(i>0 && i<dirnames.length-1 ? '/' : '')+'">',
-				__(decodeURI(dirnames[i]),_dico),
-				'</a>'
-			]
-		);
-//	terms = terms.concat(['</p>',"\n"]);
+		terms = terms.concat([
+			' > ',
+			'<a href="'+'/'+dirnames.slice(1,i+1).join('/')+(i>0 && i<dirnames.length-1 ? '/' : '')+'">',
+			__(decodeURI(dirnames[i]),_dico),
+			'</a>'
+		]);
 	__e.apply(this, terms);
 }
 
