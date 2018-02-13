@@ -51,14 +51,14 @@ function htmlspecialchars( text ) { // PHP string htmlspecialchars ( string $str
 
 //------------------------------------------------------------------------------
 
-function __e() {
-	for(var i in arguments) {
-		var argument = arguments[i];
-		if(argument.length>0 && argument.substr(0,1)=='<' && argument.substr(-1)=='>')
-			document.write(argument);
-		else
-			document.write(htmlspecialchars(argument));
-	}
+function locale_gmt(date) {
+	var tz = date.getTimezoneOffset();
+	return (
+		date.toLocaleString()+' '+'GMT'+(tz<0?'+':'-')+
+		(Math.trunc(Math.abs(tz)/60)/100).toFixed(2).substr(-2)+
+		':'+
+		(Math.abs(tz)%60/100).toFixed(2).substr(-2)
+	);
 }
 
 //------------------------------------------------------------------------------
@@ -76,17 +76,24 @@ const SCRIPT_HASH = window.location.hash;
 
 //------------------------------------------------------------------------------
 
-const _dico = {
-	'' : "Home",
-	'fr': "FR",
-	'workshop' : "Atelier",
-	'workshops' : "Ateliers"
-};
+const TITLE = document.title;
 
 //------------------------------------------------------------------------------
 
 function __(word, dico) {
 	if(dico[word]) return dico[word]; else return word;
+}
+
+//------------------------------------------------------------------------------
+
+function __e() {
+	for(var i in arguments) {
+		var argument = arguments[i];
+		if(argument.length>0 && argument.substr(0,1)=='<' && argument.substr(-1)=='>')
+			document.write(argument);
+		else
+			document.write(htmlspecialchars(argument));
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -98,7 +105,7 @@ function __e_url_chain() {
 		terms = terms.concat([
 			' > ',
 			'<a href="'+'/'+dirnames.slice(1,i+1).join('/')+(i>0 && i<dirnames.length-1 ? '/' : '')+'">',
-			__(decodeURI(dirnames[i]),_dico),
+			__(decodeURI(dirnames[i]),url_dico),
 			'</a>'
 		]);
 	__e.apply(this, terms);
@@ -106,19 +113,18 @@ function __e_url_chain() {
 
 //------------------------------------------------------------------------------
 
-function __locale_gmt(date) {
-	var tz = date.getTimezoneOffset();
-	return (
-		date.toLocaleString()+' '+'GMT'+(tz<0?'+':'-')+
-		(Math.trunc(Math.abs(tz)/60)/100).toFixed(2).substr(-2)+
-		':'+
-		(Math.abs(tz)%60/100).toFixed(2).substr(-2)
-	);
+function __e_last_modified() {
+	__e(locale_gmt(new Date(document.lastModified)));
 }
 
 //------------------------------------------------------------------------------
 
-const title = document.title;
+const url_dico = {
+	'' : "Home",
+	'fr': "FR",
+	'workshop' : "Atelier",
+	'workshops' : "Ateliers"
+};
 
 //------------------------------------------------------------------------------
 

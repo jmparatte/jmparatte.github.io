@@ -5,7 +5,7 @@ h1 {
 	font-weight: bold;
 	margin-bottom: 0;
 	padding-bottom: 12px;
-	border-bottom: 6px solid grey;
+	border-bottom: 6px solid black;
 	/* must be followed by a <p>...</p> for good screen style */
 }
 
@@ -36,7 +36,7 @@ h6 {
 }
 
 div.container {
-	max-width: 850px; /* 850=680*125% (18cm), WindowsScreenScale=125%, FirefoxScreenScale=100%, FirefoxPrintScale=80% [642px=17cm@96dpi@100%, 680px=18cm@96dpi@100%] */
+	max-width: 850px; /* 850=680@125% (18cm), WindowsScreenScale=125%, FirefoxScreenScale=100%, FirefoxPrintScale=80% [642px=17cm@96dpi@100%, 680px=18cm@96dpi@100%] */
 	padding: 0;
 }
 
