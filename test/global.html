@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 
@@ -17,27 +17,31 @@
 
 	<link rel="stylesheet" href="/global.css" />
 	<script src="/global.js"></script>
+	<script src="/en/local.js"></script>
+	<script src="local.js"></script>
 
 </head>
 <body>
 
 <div class="container">
 
-	<div class="border border-primary rounded rounded-xs jm-border-header">
+	<div>
 		<h1><script>__e(TITLE);</script></h1>
-		<p><script>__e_url_chain();</script></p>
+		<p><script>__e_url_chain();__e_menu();</script></p>
 	</div>
 
 	<table class="table table-bordered table-hover">
-	<tr><th scope="tr">SCRIPT_HREF</th><td><script>document.write(SCRIPT_HREF);</script></td></tr>
-	<tr><th scope="tr">SERVER_NAME</th><td><script>document.write(SERVER_NAME);</script></td></tr>
-	<tr><th scope="tr">SCRIPT_NAME</th><td><script>document.write(SCRIPT_NAME);</script></td></tr>
-	<tr><th scope="tr">SCRIPT_PATH</th><td><script>document.write(SCRIPT_PATH);</script></td></tr>
-	<tr><th scope="tr">SCRIPT_FILE</th><td><script>document.write(SCRIPT_FILE);</script></td></tr>
-	<tr><th scope="tr">SCRIPT_BASE</th><td><script>document.write(SCRIPT_BASE);</script></td></tr>
-	<tr><th scope="tr">SEARCH_LINE</th><td><script>document.write(SEARCH_LINE);</script></td></tr>
-	<tr><th scope="tr">SCRIPT_HASH</th><td><script>document.write(SCRIPT_HASH);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_HREF</th><td><script>__e(SCRIPT_HREF);</script></td></tr>
+	<tr><th scope="tr">SERVER_NAME</th><td><script>__e(SERVER_NAME);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_NAME</th><td><script>__e(SCRIPT_NAME);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_PATH</th><td><script>__e(SCRIPT_PATH);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_FILE</th><td><script>__e(SCRIPT_FILE);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_BASE</th><td><script>__e(SCRIPT_BASE);</script></td></tr>
+	<tr><th scope="tr">SEARCH_LINE</th><td><script>__e(SEARCH_LINE);</script></td></tr>
+	<tr><th scope="tr">SCRIPT_HASH</th><td><script>__e(SCRIPT_HASH);</script></td></tr>
 	</table>
+
+	<div><small>Document mis à jour le <script>__e_last_modified();</script></small></div>
 
 </div>
 

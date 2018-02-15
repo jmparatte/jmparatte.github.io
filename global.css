@@ -1,9 +1,60 @@
+﻿
+/*	Page Settings
+	=============
+	
+	Paper size: A4 (21x29.7cm)
+	Margins: 15mm
+	Top and bottom Headers: 7.5mm
+	
+	*/
+	
+/*	w3schools CSS
+	=============
+	
+	https://www.w3schools.com/css/default.asp
+	https://www.w3schools.com/cssref/css_functions.asp
+	https://www.w3schools.com/cssref/func_attr.asp
+	https://www.w3schools.com/cssref/func_calc.asp
+	https://www.w3schools.com/cssref/func_var.asp
+	
+	*/
+	
 
-/* https://www.w3schools.com/css/default.asp */
+/*	Customized about:settings
+	=========================
+	
+	font.name.serif.x-western = Arial
+	font.size.variable.x-western = 16 (unchanged)
+	
+	// top=bottom=7.5mm, left=right=15mm 
+	// normal Windows Screen DPI is 96dpi
+	print.printer_PDFCreator.print_edge_bottom = 28
+	print.printer_PDFCreator.print_edge_left = 56
+	print.printer_PDFCreator.print_edge_right = 56
+	print.printer_PDFCreator.print_edge_top = 28
+	
+	// set all margins to 15mm (0.590277791023254in, can be changed via Print menu)
+	print.printer_PDFCreator.print_margin_bottom = 0.590277791023254
+	print.printer_PDFCreator.print_margin_left = 0.590277791023254
+	print.printer_PDFCreator.print_margin_right = 0.590277791023254
+	print.printer_PDFCreator.print_margin_top = 0.590277791023254
+	
+	// scale printing 100% (can be changed via Print menu)
+	print.printer_PDFCreator.print_scaling = 1.00
+	
+	*/
+
+html {
+	font-size: 80%;    
+}
+
+:root {
+	--windows-screen-scale: 1.00; /*1.25; /* my Windows Screen Scale is 125% */
+}
 
 h1 {
 	font-weight: bold;
-	margin-bottom: 0;
+	margin-bottom: 6px;
 	padding-bottom: 12px;
 	border-bottom: 6px solid black;
 	/* must be followed by a <p>...</p> for good screen style */
@@ -29,14 +80,9 @@ h6 {
 	font-weight: bold;
 }
 
-.jm-border-header {
-	border-width: 2px !important;
-	margin:1em -1em;
-	padding:0 1em;
-}
-
 div.container {
-	max-width: 850px; /* 850=680@125% (18cm), WindowsScreenScale=125%, FirefoxScreenScale=100%, FirefoxPrintScale=80% [642px=17cm@96dpi@100%, 680px=18cm@96dpi@100%] */
+	max-width: 18cm; /*calc(18cm*var(--windows-screen-scale)); /* 850px=680@125% (18cm), WindowsScreenScale=125%, FirefoxScreenScale=100%, FirefoxPrintScale=80% [642px=17cm@96dpi@100%, 680px=18cm@96dpi@100%] */
+/*	max-width: 18cm; /* 680px@100% (18cm) */
 	padding: 0;
 }
 
