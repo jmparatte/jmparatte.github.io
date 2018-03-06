@@ -35,42 +35,68 @@
 <br />
 <br />
 
-<h3>Librairie « multitâche coopératif » pour Arduino</h3>
+<p>Révisions:
 
-<p style="line-height:80%;"><small>
-2018-02-08: v1.0.6 - Minor adjustments.<br />
-2017-10-17: v1.0.5 - Minor adjustments.<br />
-2017-05-08: v1.0.4 - Minor adjustments.<br />
-2017-05-08: v1.0.4 - Minor adjustments.<br />
-2017-05-05: v1.0.3 - Adding yield(),sleep(),rearm_async(). Removing void rearm(timestamp_t time, timestamp_t ival);<br />
-2017-04-26: v1.0.2 - Adding void rearm(timestamp_t time, timestamp_t ival);<br />
-2017-03-29: v1.0.1 - Minor adjustments.<br />
-2016-07-08: v1.0.0 - Initial commit.<br />
-</small></p>
+<ul>
+<li>2018-02-08: v1.0.6 - Minor adjustments.
+<li>2017-10-17: v1.0.5 - Minor adjustments.
+<li>2017-05-08: v1.0.4 - Minor adjustments.
+<li>2017-05-08: v1.0.4 - Minor adjustments.
+<li>2017-05-05: v1.0.3 - Adding yield(),sleep(),rearm_async(). Removing void rearm(timestamp_t time, timestamp_t ival);
+<li>2017-04-26: v1.0.2 - Adding void rearm(timestamp_t time, timestamp_t ival);
+<li>2017-03-29: v1.0.1 - Minor adjustments.
+<li>2016-07-08: v1.0.0 - Initial commit.
+</ul>
+
+
+
+<h3>Librairie « Multitâche coopératif » pour Arduino</h3>
+
+<p>Cette librairie est le fruit d'un questionnement lors d'un concours de robotique:
+Comment gérer et contrôler des processus parallèles et indépendants avec Arduino?
+
+<p>Sans librairie additionnelle, la réponse est assez complexe et nécessite une programmation délicate
+et coûteuse en effort de programmation: Chaque processus doit effectuer sa propre gestion cyclique dans
+des fonctions <code>loop()</code> spécialisées.
+
+<p>La réponse professionnelle serait sans doute l'usage de <code>RTOS</code>
+avec le modèle <code>multitâche préemptif</code>.
+Cela induit une complexité de programmation difficilement compatible avec les librairies <var>non-réentrantes</var> d'Arduino.
+
+<p>Au final, le mode <code>multitâche coopératif</code> est bien plus approprié,
+à la manière de nombreux logiciels de programmation d'applications comme <code>NodeJS</code>, <code>Python</code>, <code>Lua</code>...
+En plus d'offrir une gestion <code>multitâche coopératif</code>, ces logiciels offrent également une gestion d'<code>événements</code>.
+Les <code>événements</code>, on en fait très facilement notre affaire avec Arduino.
+
+
 
 <h3>Concepts</h3>
 
 <p><code>jm_Scheduler</code> gère des <code>coroutines</code>
-répétées et espacées dans le temps à la manière de la fonction JavaScript <code>setInterval()</code>,
-mais avec quelques améliorations et extensions:</p>
+activées et réactivées à la manière de la fonction JavaScript <code>setInterval()</code>,
+mais avec des fonctionnalités supplémentaires:</p>
 
 <ul>
 <li>Par défaut, <code>jm_Scheduler</code> démarre immédiatement la <code>coroutine</code> et la répète périodiquement.</li>
 <li>La première exécution peut être différée.</li>
 <li>Les exécutions répétées peuvent être annulées.</li>
-<li>Le temps de répétition peut être dynamiquement changé.</li>
-<li>La fonction de <code>coroutine</code> peut être dynamiquement changée.</li>
+<li>Le temps de répétition peut être changé	 dynamiquement.</li>
+<li>La fonction de <code>coroutine</code> peut être changée dynamiquement.</li>
 <li>La <code>coroutine</code> peut être stoppée et redémarrée ultérieurement.</li>
 </ul>
 
-<p><code>jm_Scheduler</code> planifie les tâches avec le même principe que la librairie officielle <a href="https://www.arduino.cc/en/Reference/Scheduler"><code>Scheduler</code></a>
+<p><code>jm_Scheduler</code> planifie les tâches avec le même principe <code>coopératif</code>
+que la librairie officielle <a href="https://www.arduino.cc/en/Reference/Scheduler"><code>Scheduler</code></a>
 pour Arduino DUE et ZERO, mais l'étend à tous les modèles d'Arduino,
-avec plus de fonctionnalités et <u>surtout avec une gestion des temps précises et robustes</u>.
-<p>La fonction <code>yield()</code> qui suspend une tâche est implémentée.
-<p>La fonction <code>startLoop()</code> n'est pas implémentée car elle n'est pas adaptée au principe du <code>multitâche coopératif</code>,
-elle est plus adaptée au principe du <code>multitâche préemptif</code>.
+avec plus de fonctionnalités, et surtout avec <u>une gestion intégrée du temps des processus</u>.
 
-<p><code>jm_Scheduler</code> exécute les <code>coroutines</code> séquentiellement sur le stack unique du processeur.
+<p>La fonction <code>yield()</code> qui suspend une tâche est implémentée.
+
+<p>La fonction <code>startLoop()</code> n'est pas implémentée car elle n'est pas appropriée
+au principe du <code>multitâche coopératif</code>.
+En fait, elle est plus adaptée au principe du <code>multitâche préemptif</code>.
+
+<p><code>jm_Scheduler</code> exécute les <code>coroutines</code> séquentiellement sur le stack du processeur.
 
 <p>Les règles de <code>yield</code> et <code>resume</code> sont les suivantes:
 
@@ -81,8 +107,10 @@ Dans ce cas, la <code>coroutine</code> sera redémarrée cycliquement selon la v
 Dans ce cas, la <code>coroutine</code> sera <var>résumée</var> dès que plus aucunes <code>coroutines</code>
 ne demandera une exécution immédiate.
 <li>Les <var>variables persistantes</var> des <code>coroutines</code> doivent être implémentées <code>globalement</code>
-ou à l'intérieur des <code>coroutine</code> avec le <var>pragma</var> <code>static</code>.
+ou à l'intérieur des <code>coroutines</code> en accolant le mot-clé <code>static</code> à la déclaration de la variable.
 </ul>
+
+
 
 <h3>Exemple basique</h3>
 
@@ -102,7 +130,7 @@ void setup(void)
 {
 	Serial.begin(9600);
 
-	scheduler.start(coroutine, TIMESTAMP_1SEC); // Start immédiatement coroutine()
+	scheduler.start(coroutine, TIMESTAMP_1SEC); // Start coroutine() immediately
 	// and repeat it every second
 }
 
@@ -112,23 +140,31 @@ void loop(void)
 }
 </code></pre>
 
+
+
 <h3>Plan d'étude</h3>
 
 <ul>
-<li>Commencez avec l'exemple <code>Clock1.ino</code>. Cet exemple démontre les avantages de démarrer immédiatement une <code>coroutine</code> d'affichage du temps puis de la répéter périodiquement.
+<li>Commencez avec l'exemple <code>Clock1.ino</code>.
+Cet exemple démontre les avantages de démarrer immédiatement une <code>coroutine</code>
+d'affichage du temps avec une répétition périodique.
 <li>Poursuivez avec les exemples <code>Clock2.ino</code> et <code>Clock3.ino</code> qui présentent d'autres idées de comptage du temps.
-<li>L'exemple <code>Clock4.ino</code> présente une autre technique utile de <code>jm_Scheduler</code>: changer dynamiquement de fonction de <code>coroutine</code>.
+<li>L'exemple <code>Clock4.ino</code> présente une autre technique utile de <code>jm_Scheduler</code>:
+Changer dynamiquement de fonction de <code>coroutine</code>.
 <li>Les exemples <code>Beat1.ino</code> et <code>Beat2.ino</code> présentent les interactions possibles entre 2 <code>coroutines</code>.
-<li>L'exemple <code>Wakeup1.ino</code> démontre l'interaction possible entre une <code>routine d'interruption</code> et une <code>coroutine</code>, en implémentant un <code>timeout</code>.
+<li>L'exemple <code>Wakeup1.ino</code> démontre l'interaction possible entre une <code>routine d'interruption</code>
+et une <code>coroutine</code>, et en implémentant un <code>timeout</code> dans une <u>gestion d'événement</u>.
 </ul>
+
+
 
 <h3>Timestamp</h3>
 
 <ul>
 <li>Le <code>timestamp</code> (référence de temps) est généré par la fonction Arduino <code>micros()</code>.
 <li>Par design, la fonction Arduino <code>micros()</code> d'un UNO ou Leonardo fonctionnant à 16MHz
-retourne un <code>timestamp</code> avec une granularité de [4us].
-<li><code>jm_Scheduler</code> ne requière aucun hardware spécifique, ni n'utilise aucune ressource dédiée.
+retourne un <code>timestamp</code> avec une granularité de <code>[4us]</code>.
+<li>Enfin, <code>jm_Scheduler</code> ne requière aucun hardware spécifique, ni n'utilise aucune ressource dédiée.
 </ul>
 
 <p>La déclaration Arduino de la fonction <code>micros()</code> est la suivante:
@@ -139,7 +175,10 @@ unsigned long micros();
 
 <p>Regardez dans les <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/">références Arduino <code>micros()</code></a> pour les détails de la fonction.
 
-<p><code>timestamp</code> est un compteur <code>32-bit</code> en <code>[us]</code> et redémarre à 0 environ toutes les70 minutes (précisément 1h+11m+34s+967ms+296us).
+<p><code>timestamp</code> est un compteur <code>32-bit</code> en <code>[us]</code>
+et redémarre à 0 environ toutes les 70 minutes (précisément 1h+11m+34s+967ms+296us).
+
+
 
 <h3>Déclaration et constantes Timestamp</h3>
 
@@ -174,13 +213,15 @@ En pratique, n'utilisez pas de valeur de <code>timestamp</code> plus grande qu'u
 
 </ul>
 
-<h3>jm_Scheduler méthodes</h3>
+
+
+<h3>Méthodes jm_Scheduler</h3>
 
 <pre><code>
-// start <code>coroutine</code> immédiatement
+// start <code>coroutine</code> immediately
 void start(voidfuncptr_t func);
 
-// start <code>coroutine</code> immédiatement and repeat it at fixed interval
+// start <code>coroutine</code> immediately and repeat it at fixed interval
 void start(voidfuncptr_t func, timestamp_t ival);
 
 // start <code>coroutine</code> on time and repeat it at fixed interval
@@ -210,8 +251,10 @@ simplement interrompre les exécutions suivantes.
 <li><code>rearm()</code> change les consignes de la variable <var>scheduler</var>.
 Les nouvelles valeurs pendront effet à la fin d'exécution de la <code>coroutine</code>.
 L'usage principal de <code>rearm()</code> est de changer l'intervalle d'exécution
-ou encore de changer de fonction de <code>coroutine</code>.
+ou encore de changer de fonction <code>coroutine</code>.
 </ul>
+
+
 
 <h3>Arduino loop() et yield()</h3>
 
@@ -273,6 +316,8 @@ void setup(void)
 <li><code>yield()</code> est automatiquement invoqué dans la fonction Arduino <code>delay()</code>.
 </ul>
 
+
+
 <h3>Bonnes pratiques de <var>scheduling</var></h3>
 
 <p>Pour garantir la bonne exécution de toutes les tâches coopératives,
@@ -286,6 +331,8 @@ ou la fonction <code>yield()</code> pour fractionner l'exécution d'une <code>co
 Les méthodes <code>jm_Scheduler</code> <code>rearm()</code> et <code>rearm_async()</code>
 permettent de sérialiser l'exécution de plusieurs <code>coroutines</code>.
 
+
+
 <h3>Changer le <var>Timestamp</var></h3>
 
 <p>Ci-dessous sont listés quelques <var>hacks</var> qui peuvent être implémentés en modifiant le fichier <code>jm_Scheduler.h</code>:
@@ -297,7 +344,7 @@ De cette manière, toutes les comparaisons de <code>timestamp</code> seront acc�
 <li>On peut obtenir une plus longue périodicité en implémentant un <code>timestamp</code> de <code>64-bit</code>.
 </ul>
 
-	<div><small>Document mis à jour le 06.03.2018 14:21:53 UTC+01:00</small></div>
+	<div><small>Document mis à jour le 06.03.2018 16:46:37 UTC+01:00</small></div>
 
 </div>
 

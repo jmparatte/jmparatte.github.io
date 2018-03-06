@@ -99,3 +99,18 @@ pre {
     border: 2px solid black;
     border-radius: 10px;
 }
+
+@media print {
+  @page {
+    size: A4 portrait;
+  }
+  body {
+    min-width: 18cm !important;
+  }
+  .container {
+    min-width: 18cm !important;
+  }
+  .navbar {
+    display: none;
+  }
+}
