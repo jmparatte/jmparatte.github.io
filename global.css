@@ -88,3 +88,14 @@ div.container {
 
 small {
 }
+
+pre {
+    -moz-tab-size:    4; /* Firefox 4+ */
+    -o-tab-size:      4; /* Opera 11.5 & 12.1 only */
+    tab-size:         4; /* Chrome 21+, Safari 6.1+, Opera 15+ */
+    
+    margin: 10px 20px;
+    padding: 0px 18px 16px 18px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
