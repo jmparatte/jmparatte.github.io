@@ -52,21 +52,25 @@
 
 <h3>Librairie « Multitâche coopératif » pour Arduino</h3>
 
+<img src="/images/20180326_155231.jpg" style="margin-left:4px; width:8cm;" align="right">
+
 <p>Cette librairie est le fruit d'un questionnement lors d'un concours de robotique:
 Comment gérer et contrôler des processus parallèles et indépendants avec Arduino?
 
 <p>Sans librairie additionnelle, la réponse est assez complexe et nécessite une programmation délicate
-et coûteuse en effort de programmation: Chaque processus doit effectuer sa propre gestion cyclique dans
-des fonctions <code>loop()</code> spécialisées.
+et coûteuse en effort de programmation: Chaque processus doit effectuer sa propre gestion cyclique
+dans la fonction <code>loop()</code>.
 
-<p>La réponse professionnelle serait sans doute l'usage de <code>RTOS</code>
-avec le modèle <code>multitâche préemptif</code>.
-Cela induit une complexité de programmation difficilement compatible avec les librairies <var>non-réentrantes</var> d'Arduino.
+<p>La réponse professionnelle serait sans doute l'usage de <code>RTOS</code> avec le modèle <code>multitâche préemptif</code>.
+Cela induit une complexité de programmation avec les librairies <var>non-réentrantes</var> d'Arduino
+ou avec la taille de stack très petite des Arduino Uno, Leonardo, etc....
 
 <p>Au final, le mode <code>multitâche coopératif</code> est bien plus approprié,
-à la manière de nombreux logiciels de programmation d'applications comme <code>NodeJS</code>, <code>Python</code>, <code>Lua</code>...
-En plus d'offrir une gestion <code>multitâche coopératif</code>, ces logiciels offrent également une gestion d'<code>événements</code>.
-Les <code>événements</code>, on en fait très facilement notre affaire avec Arduino.
+à la manière de nombreux logiciels de programmation d'applications modernes
+comme <code>NodeJS</code>, <code>Python</code>, <code>Lua</code>...
+En plus d'offrir une gestion <code>multitâche coopératif</code> presque native,
+ces logiciels offrent également une gestion d'<code>événements</code>.
+Générer des <code>événements</code>, on peut le faire également avec la librairie <code>jm_Scheduler</code>.
 
 
 
@@ -74,7 +78,7 @@ Les <code>événements</code>, on en fait très facilement notre affaire avec Ar
 
 <p><code>jm_Scheduler</code> gère des <code>coroutines</code>
 activées et réactivées à la manière de la fonction JavaScript <code>setInterval()</code>,
-mais avec des fonctionnalités supplémentaires:</p>
+avec des fonctionnalités supplémentaires:</p>
 
 <ul>
 <li>Par défaut, <code>jm_Scheduler</code> démarre immédiatement la <code>coroutine</code> et la répète périodiquement.</li>
@@ -82,19 +86,23 @@ mais avec des fonctionnalités supplémentaires:</p>
 <li>Les exécutions répétées peuvent être annulées.</li>
 <li>Le temps de répétition peut être changé	 dynamiquement.</li>
 <li>La fonction de <code>coroutine</code> peut être changée dynamiquement.</li>
-<li>La <code>coroutine</code> peut être stoppée et redémarrée ultérieurement.</li>
+<li>Une <code>coroutine</code> peut être stoppée et puis redémarrée ultérieurement.</li>
+<li>Une <code>coroutine</code> peut être <var>réveillée</var> par une routine d'interruption.</li>
+<li>A chaque <code>coroutine</code> est associé un <code>scheduler</code>.</li>
+<li>Le nombre de <code>schedulers</code> n'est limité que par la mémoire à disposition.
 </ul>
 
-<p><code>jm_Scheduler</code> planifie les tâches avec le même principe <code>coopératif</code>
-que la librairie officielle <a href="https://www.arduino.cc/en/Reference/Scheduler"><code>Scheduler</code></a>
-pour Arduino DUE et ZERO, mais l'étend à tous les modèles d'Arduino,
-avec plus de fonctionnalités, et surtout avec <u>une gestion intégrée du temps des processus</u>.
+<p>La librairie officielle <a href="https://www.arduino.cc/en/Reference/Scheduler"><code>Scheduler</code></a>
+ne fonctionne que pour les processeurs SAM et SAMD (Arduino Due et Zero) et
+planifie les tâches avec le modèle <code>préemptif</code>.
+<code>jm_Scheduler</code> planifie les tâches avec le modèle <code>coopératif</code>
+<b>POUR TOUS LES MODÈLES D'ARDUINO</b>, avec plus de fonctionnalités et
+avec <u>une gestion centralisée du temps des processus</u>.
 
 <p>La fonction <code>yield()</code> qui suspend une tâche est implémentée.
 
-<p>La fonction <code>startLoop()</code> n'est pas implémentée car elle n'est pas appropriée
-au principe du <code>multitâche coopératif</code>.
-En fait, elle est plus adaptée au principe du <code>multitâche préemptif</code>.
+<p>La fonction <code>startLoop()</code> de la librairie officielle Arduino n'est pas implémentée
+car elle n'est pas appropriée au principe du <code>multitâche coopératif</code>.
 
 <p><code>jm_Scheduler</code> exécute les <code>coroutines</code> séquentiellement sur le stack du processeur.
 
@@ -104,8 +112,8 @@ En fait, elle est plus adaptée au principe du <code>multitâche préemptif</cod
 <li><code>yield</code> intervient immédiatement lorsque une <code>coroutine</code> prend fin (<code>return</code> final).<br \>
 Dans ce cas, la <code>coroutine</code> sera redémarrée cycliquement selon la valeur de répétition.
 <li><code>yield</code> peut être déclenché par l'appel de la fonction <code>yield()</code>.<br />
-Dans ce cas, la <code>coroutine</code> sera <var>résumée</var> dès que plus aucunes <code>coroutines</code>
-ne demandera une exécution immédiate.
+Dans ce cas, la <code>coroutine</code> sera <var>résumée</var> dès que plus aucune <code>coroutine</code>
+ne demande une exécution immédiate.
 <li>Les <var>variables persistantes</var> des <code>coroutines</code> doivent être implémentées <code>globalement</code>
 ou à l'intérieur des <code>coroutines</code> en accolant le mot-clé <code>static</code> à la déclaration de la variable.
 </ul>
@@ -235,23 +243,60 @@ void rearm(timestamp_t ival);
 
 // rearm current coroutine, change <code>coroutine</code> function and set or reset interval
 void rearm(voidfuncptr_t func, timestamp_t ival);
+
+// rearm coroutine asynchronously and set interval
+void rearm_async(timestamp_t ival);
+
+// rearm coroutine asynchronously, change coroutine function and set interval
+void rearm_async(voidfuncptr_t func, timestamp_t ival);
+
+// wakeup a scheduled coroutine (maybe repeated)
+void wakeup();
+
+// wakeup a scheduled coroutine (maybe repeated but only 1st wakeup_time is recorded)
+void wakeup(uint32_t wakeup_time);
+
+// read wakeup count, reset it and remove coroutine from wakeup chain
+int wakeup_read();
 </code></pre>
 
 <ul>
-<li><code>start()</code> démarre une fonction <code>coroutine</code>,
-immédiatement ou à un instant <var>t</var>, avec ou sans répétitions.
-<code>start()</code> est invoqué une fois. Ensuite <code>rearm()</code> permet de changer les données du <var>scheduler</var>.
 
-<li><code>stop()</code> interrompt toutes nouvelles exécutions de la <code>coroutine</code>.
-<code>stop()</code> peut être invoqué par la <code>coroutine</code> ou par d'autres processus.
-Si <code>stop()</code> est inviqué par la <code>coroutine</code> elle-même,
+<li><code>start()</code> démarre une <code>coroutine</code>,
+immédiatement ou après une attente <var>time</var>,
+avec ou sans répétition <var>ival</var>.
+<code>start()</code> est en principe invoqué une fois ou
+lorsque la <code>coroutine</code> est stoppée.
+<code>rearm()</code> permet de changer les données du <var>scheduler</var> lorsque la <code>coroutine</code> est en exécution.
+
+<li><code>stop()</code> interrompt toutes nouvelles exécutions d'une <code>coroutine</code>.
+<code>stop()</code> peut être invoqué par la <code>coroutine</code> en exécution ou par d'autres processus.
+Lorsque <code>stop()</code> est invoqué par la <code>coroutine</code> en exécution,
 <code>stop()</code> ne provoque pas l'arrêt immédiat de la <code>coroutine</code>,
-simplement interrompre les exécutions suivantes.
+<code>stop()</code> suspend simplement les exécutions suivantes.
+Pour stopper immédiatement une <code>coroutine</code>,
+la <code>coroutine</code> doit invoquer <code>stop()</code> puis effectuer un <var>return</var>.
 
 <li><code>rearm()</code> change les consignes de la variable <var>scheduler</var>.
 Les nouvelles valeurs pendront effet à la fin d'exécution de la <code>coroutine</code>.
-L'usage principal de <code>rearm()</code> est de changer l'intervalle d'exécution
-ou encore de changer de fonction <code>coroutine</code>.
+<code>rearm()</code> permet de changer l'intervalle d'exécution
+ou de changer la fonction <code>coroutine</code>.
+L'exécution de la prochaine instance de la <code>coroutine</code> sera déclenchée
+de manière synchrone en additionnant <code>ival</code> au temps de déclenchement de l'instance précédente.
+
+<li><code>rearm_async()</code> change les consignes de la variable <var>scheduler</var>.
+Les nouvelles valeurs pendront effet à la fin d'exécution de la <code>coroutine</code>.
+<code>rearm_async()</code> permet de changer l'intervalle de déclenchement de la prochaine instance,
+et en option de changer la fonction <code>coroutine</code>.
+L'exécution de la prochaine instance de la <code>coroutine</code> sera déclenchée
+de manière asynchrone en additionnant <code>ival</code> au temps de fin d'exécution de l'instance précédente.
+
+<li><code>wakeup()</code> <var>réveille</var> une <code>coroutine</code> en attente d'exécution.
+Le nombre de <var>réveils</var> est comptabilisé.
+<code>wakeup_read()</code> lit le compteur puis le réinitialise.
+<code>wakeup()</code> peut être invoqué depuis une routine d'interruption.
+<code>wakeup_read()</code> ne doit être invoqué que depuis la <code>coroutine</code> <var>réveillée</var>.
+
 </ul>
 
 
@@ -344,7 +389,7 @@ De cette manière, toutes les comparaisons de <code>timestamp</code> seront acc�
 <li>On peut obtenir une plus longue périodicité en implémentant un <code>timestamp</code> de <code>64-bit</code>.
 </ul>
 
-	<div><small>Document mis à jour le 06.03.2018 16:46:37 UTC+01:00</small></div>
+	<div><small>Document mis à jour le 27.03.2018 14:30:42 UTC+02:00</small></div>
 
 </div>
 

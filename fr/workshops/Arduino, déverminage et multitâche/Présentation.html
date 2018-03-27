@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Atelier Arduino." />
+	<meta name="author" content="Jean-Marc Paratte" />
+	<link rel="icon" href="/jean-marc.ico" />
+
+	<title>Atelier Arduino, déverminage et multitâche</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+	<link rel="stylesheet" href="/global.css" />
+	<script src="/global.js"></script>
+	<script src="/fr/local.js"></script>
+	<script src="local.js"></script>
+
+	<style>
+
+.container {
+	min-height: 20cm;
+}
+
+#hashes {
+	position: fixed;
+	top: 4px;
+	left: 4px;
+	text-align: left;
+	font-size: 10px;
+	width: 120px;
+}
+
+.grid {
+background:
+repeating-linear-gradient(to right, #DDD, #DDD 1px, transparent 1px, transparent 16px),
+repeating-linear-gradient(to bottom, #DDD, #DDD 1px, transparent 1px, transparent 16px);
+}
+
+@media print {
+/*
+  @page {
+    size: A4 portrait;
+  }
+  body {
+    min-width: 18cm !important;
+  }
+  .container {
+    min-width: 18cm !important;
+  }
+  .navbar {
+    display: none;
+  }
+*/
+  #hashes {
+    display: none;
+  }
+}
+
+	</style>
+
+	<script>
+
+$(function(){
+
+// Select all links with hashes
+$('a[href*="#"]')
+  // Remove links that don't actually link to anything
+  .not('[href="#"]')
+  .not('[href="#0"]')
+  .click(function(event) {
+    // On-page links
+    if (
+      location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+      &&
+      location.hostname == this.hostname
+    ) {
+      // Figure out element to scroll to
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+      // Does a scroll target exist?
+      if (target.length) {
+        // Only prevent default if animation is actually gonna happen
+        event.preventDefault();
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000, function() {
+          // Callback after animation
+          // Must change focus!
+          var $target = $(target);
+          $target.focus();
+          if ($target.is(":focus")) { // Checking if the target was focused
+            return false;
+          } else {
+            $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
+            $target.focus(); // Set focus again
+          };
+        });
+      }
+    }
+  });
+
+$("#grid_on").click(function(){$(".container").addClass("grid"); return false;});
+$("#grid_off").click(function(){$(".container").removeClass("grid"); return false;});
+
+});
+
+	</script>
+
+</head>
+<body>
+
+<div id="hashes">
+	<p>
+		Smooth links<br />
+		<a href="#presentation">Présentation</a><br />
+		<a href="#modes">Modes</a><br />
+		<a href="#preemptiv">Préemptif</a><br />
+		<a href="#cooperativ">Coopératif</a><br />
+		<a href="#technics">Techniques</a><br />
+		<a href="#appearance">Multitâches</a><br />
+		<a href="#language">Programmation</a><br />
+		<a href="#modern">Modernes</a><br />
+		<a href="#arduino">Arduino</a><br />
+		<a href="#interrupt">Interrupt</a><br />
+		<a href="#scheduler">Scheduler</a><br />
+		<a href="#updated">Màj</a><br />
+	</p>
+	<p>
+		Grid<br />
+		<a id="grid_on" href="#">On</a><br />
+		<a id="grid_off" href="#">Off</a>
+	</p>
+</div>
+
+<div id="presentation" class="container">
+	<div>
+		<h1>Atelier Arduino, déverminage et multitâche</h1>
+		<p> &gt; <a href="/">Home</a> &gt; <a href="/fr/">Français</a> &gt; <a href="/fr/workshops/">Ateliers</a> &gt; <a href="/fr/workshops/Arduino, déverminage et multitâche/">Arduino, déverminage et multitâche</a> &gt; <a href="refs.html">Références</a> - <a href="workshop1-2.html">Atelier 1-2</a> - <a href="workshop2-2.html">Atelier 2-2</a></p>
+	</div>
+	<p><img src="/images/20180326_155231.jpg" style="width:18cm;" /></p>
+</div>
+
+<div id="modes" class="container">
+	<h1>Modes multitâches</h1>
+	<br />
+	<ul>
+		<li>préemptif (<i>preemptive</i>)
+		<li>coopératif (<i>cooperative</i>)
+	</ul>
+	<p>Au début était le préemptif, puis est apparu le coopératif.
+	<p><img src="/images/Preemptive-Cooperative_1.png" title="https://www.rapitasystems.com/rs_fil/Preemptive-Cooperative_1.png" /></p>
+</div>
+
+<div id="preemptiv" class="container">
+	<h1>Principe du multitâche préemptif</h1>
+	<br />
+	<h6>Commutation de contexte</h6>
+	<ul>
+		<li>stack propre à chaque fil de processus (<i>thread</i>)
+		<li>suspension d'une tâche en exécution (puis reprise)
+		<li>mise en place du Round Robin (table ronde, découpage du temps)
+		<li>priorité des processus
+	</ul>
+	<p><img src="/images/diagram34.png" title="http://www.learnlinux.org.za/courses/build/images/diagram34.png" style="width:4cm;" /> <img src="/images/suspending.gif" title="https://www.freertos.org/implementation/suspending.gif" style="width:12cm;" /></p>
+	<p><img src="/images/c-basic12.gif" title="http://www.vxdev.com/docs/vx55man/vxworks/guide/images/c-basic12.gif" style="width:12cm;" /></p>
+	<p><a href="https://www.rapitasystems.com/blog/what-really-happened-to-the-software-on-the-mars-pathfinder-spacecraft">What really happened to the software on the Mars Pathfinder spacecraft?</a></p>
+</div>
+
+<div id="cooperativ" class="container">
+	<h1>Principe du multitâche coopératif</h1>
+	<br />
+	<h6>Sans commutation de contexte</h6>
+	<ul>
+		<li>toutes les coroutines (tâches) sont en exécution sur le stack courant de l'application
+		<li>une coroutine doit prendre fin le plus rapidement possible, donc <b>PAS DE BOUCLE!</b>
+		<li><b>EN CAS DE BOUCLE,</b> une coroutine doit se mettre volontairent en suspension
+	</ul>
+</div>
+
+<div id="technics" class="container">
+	<h1>Techniques de gestion multitâche</h1>
+	<br />
+	<h6>Mutex</h6>
+	<ul>
+		<li>exclusion mutelle d'accès à des ressources
+	</ul>
+	<h6>Sémaphore</h6>
+	<ul>
+		<li>compteur positif (Vendre des objets) ou négatif (Prendre des objets)
+	</ul>
+	<h6>Yield</h6>
+	<ul>
+		<li>passer la main<br />
+	</ul>
+</div>
+
+<div id="appearance" class="container">
+	<h1>Apparition des modes multitâches</h1>
+	<br />
+	<h6>1970 préemptif</h6>
+	<ul>
+		<li>UNIX
+	</ul>
+	<h6>1980 coopératif, partiellement préemptif</h6>
+	<ul>
+		<li>Windows 2.x-3.1
+		<li>OS 9.x
+	</ul>
+	<h6>1980 préemptif, Round Robin</h6>
+	<ul>
+		<li>1986 MS-DOS 4.0 (multitasking)
+		<li>1986 RTK (développement ASER SA)
+	</ul>
+	<h6>1990 préemptif</h6>
+	<ul>
+		<li>1993 Windows NT 3.1
+		<li>2001 OS X
+	</ul>
+	<h6>2000 préemptif</h6>
+	<ul>
+		<li>2003 RTOS (préemtif ou coopératif ou mixte, au choix),<br />
+		développé pour les microcontrôleurs.<br />
+		Egalement pour Arduino.
+	</ul>
+	<h6>2010 Arduino</h6>
+	<ul>
+		<li>2015 jm_Scheduler, coopératif, gestion du temps synchrone et/ou asynchrone,<br />
+		orienté gestion d'événements.
+		<li>2017 Scheduler officiel Arduino, préemptif, implémente de multiples <i>loop()</i>,<br />
+		uniquement pour les architectures SAM and SAMD (Zero, Due, ...).
+	</ul>
+</div>
+
+<div id="language" class="container">
+	<h1>Apparition des styles de programmation</h1>
+	<br />
+	<h6>1970 linéaire</h6>
+	<ul>
+		<li>Fortran, Cobol, Basic, C, Pascal
+	</ul>
+	<h6>1980 objet</h6>
+	<ul>
+		<li>C++
+	</ul>
+	<h6>1990 événementiel</h6>
+	<ul>
+		<li>1996 JavaScript (Netscape Navigator 2.0)
+	</ul>
+	<h6>2000 IA</h6>
+	<ul>
+		<li>1950 Alan Turing se demande si une machine peut «penser»
+		<li>2017 Johannes David présente au Microclub «Neuroévolution»
+	</ul>
+</div>
+
+<div id="modern" class="container">
+	<h1>Les langages modernes</h1>
+	<br />
+	<h6>à la fois objets, événementiels et coopératifs</h6>
+	<ul>
+		<li>NodeJS
+		<li>Python
+		<li>Lua
+		<li>...
+	</ul>
+</div>
+
+<div id="arduino" class="container">
+	<h1>Arduino, c'est quoi ?</h1>
+	<br />
+	<h6>Arduino est...</h6>
+	<ul>
+		<li>C++
+		<li>un ensemble de fonctions «gravées dans le marbre» (<i>digitalRead(), ..., millis(), ...</i>)
+		<li>des librairies additionnelles (<i>Wire, SPI, ...</i>)
+		<li>des librairies «objets» (<i>stream, print, ...</i>)
+	</ul>
+	<h6>Arduino n'est pas...</h6>
+	<ul>
+		<li>multitâche (pas de sémaphore, pas de mutex)
+		<li>événementiel
+		<li>réentrant (sauf quelques fonctions: <i>micros(), millis(), digitalRead(), ...</i>)
+	</ul>
+</div>
+
+<div id="interrupt" class="container">
+	<h1>Préemptif par interruption</h1>
+	<br />
+	<h6>Usage et règles</h6>
+	<ul>
+		<li>en règle générale, toutes les librairies Arduino sont inutilisables (<i>Wire, SPI, Serial, ...</i>)
+		<li>absolument aucun moyen de déverminage intégré (usage moniteur série impossible)
+		<li>technique JDN de déverminage: écriture d'un statut sur un DAC,<br />
+		lecture de la «signature» à l'aide d'un oscilloscope
+		<li>imbrication d'interrupts possible
+	</ul>
+</div>
+
+<div id="scheduler" class="container">
+	<h1>Coopératif par <i>scheduler</i></h1>
+	<br />
+	<h6>Usage et règles</h6>
+	<ul>
+		<li>toutes les librairies Arduino sont utilisables (<i>Wire, SPI, Serial, ...</i>)
+		<li>moyen de déverminage intégré accessible (moniteur série)
+		<li>mutex implémentable à l'aide de <i>Yield()</i>
+		<li>sémaphore et timeout implémentables à l'aide de <i>wakeup()</i>
+	</ul>
+	<p><a href="/fr/Arduino/libraries/jm_Scheduler/">La suite en exercice...</a>
+</div>
+
+<br />
+
+<div id="updated" class="container">
+	<div><small>Document mis à jour le 27.03.2018 10:49:29 UTC+02:00</small></div>
+</div>
+
+</body>
+</html>
