@@ -129,6 +129,7 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 		<a href="#arduino">Arduino</a><br />
 		<a href="#interrupt">Interrupt</a><br />
 		<a href="#scheduler">Scheduler</a><br />
+		<a href="#comparison">Comparaison</a><br />
 		<a href="#updated">Màj</a><br />
 	</p>
 	<p>
@@ -138,6 +139,8 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	</p>
 </div>
 
+
+
 <div id="presentation" class="container">
 	<div>
 		<h1>Atelier Arduino, déverminage et multitâche</h1>
@@ -145,6 +148,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	</div>
 	<p><img src="/images/20180326_155231.jpg" style="width:18cm;" /></p>
 </div>
+
+
+
+<br />
+<br />
+<br />
+
+
 
 <div id="modes" class="container">
 	<h1>Modes multitâches</h1>
@@ -156,6 +167,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	<p>Au début était le préemptif, puis est apparu le coopératif.
 	<p><img src="/images/Preemptive-Cooperative_1.png" title="https://www.rapitasystems.com/rs_fil/Preemptive-Cooperative_1.png" /></p>
 </div>
+
+
+
+<br />
+<br />
+<br />
+
+
 
 <div id="preemptiv" class="container">
 	<h1>Principe du multitâche préemptif</h1>
@@ -172,6 +191,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	<p><a href="https://www.rapitasystems.com/blog/what-really-happened-to-the-software-on-the-mars-pathfinder-spacecraft">What really happened to the software on the Mars Pathfinder spacecraft?</a></p>
 </div>
 
+
+
+<br />
+<br />
+<br />
+
+
+
 <div id="cooperativ" class="container">
 	<h1>Principe du multitâche coopératif</h1>
 	<br />
@@ -182,6 +209,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 		<li><b>EN CAS DE BOUCLE,</b> une coroutine doit se mettre volontairent en suspension
 	</ul>
 </div>
+
+
+
+<br />
+<br />
+<br />
+
+
 
 <div id="technics" class="container">
 	<h1>Techniques de gestion multitâche</h1>
@@ -199,6 +234,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 		<li>passer la main<br />
 	</ul>
 </div>
+
+
+
+<br />
+<br />
+<br />
+
+
 
 <div id="appearance" class="container">
 	<h1>Apparition des modes multitâches</h1>
@@ -237,6 +280,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	</ul>
 </div>
 
+
+
+<br />
+<br />
+<br />
+
+
+
 <div id="language" class="container">
 	<h1>Apparition des styles de programmation</h1>
 	<br />
@@ -259,6 +310,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	</ul>
 </div>
 
+
+
+<br />
+<br />
+<br />
+
+
+
 <div id="modern" class="container">
 	<h1>Les langages modernes</h1>
 	<br />
@@ -270,6 +329,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 		<li>...
 	</ul>
 </div>
+
+
+
+<br />
+<br />
+<br />
+
+
 
 <div id="arduino" class="container">
 	<h1>Arduino, c'est quoi ?</h1>
@@ -289,6 +356,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	</ul>
 </div>
 
+
+
+<br />
+<br />
+<br />
+
+
+
 <div id="interrupt" class="container">
 	<h1>Préemptif par interruption</h1>
 	<br />
@@ -302,6 +377,14 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	</ul>
 </div>
 
+
+
+<br />
+<br />
+<br />
+
+
+
 <div id="scheduler" class="container">
 	<h1>Coopératif par <i>scheduler</i></h1>
 	<br />
@@ -309,17 +392,150 @@ $("#grid_off").click(function(){$(".container").removeClass("grid"); return fals
 	<ul>
 		<li>toutes les librairies Arduino sont utilisables (<i>Wire, SPI, Serial, ...</i>)
 		<li>moyen de déverminage intégré accessible (moniteur série)
-		<li>mutex implémentable à l'aide de <i>Yield()</i>
-		<li>sémaphore et timeout implémentables à l'aide de <i>wakeup()</i>
+		<li>mutex implémentable à l'aide de <code>yield()</code>
+		<li>sémaphore et timeout implémentables à l'aide de <code>wakeup()</code>
 	</ul>
+	<!--p><a href="/fr/Arduino/libraries/jm_Scheduler/">La suite en exercice...</a-->
+</div>
+
+
+
+<br />
+<br />
+<br />
+
+
+
+<div id="comparison" class="container">
+	<h1>Comparaison bloquant vs cyclique</h1>
+	<br />
+	<table>
+<tr>
+	<td>
+<style>
+
+pre {
+    -moz-tab-size:    2; /* Firefox 4+ */
+    -o-tab-size:      2; /* Opera 11.5 & 12.1 only */
+    tab-size:         2; /* Chrome 21+, Safari 6.1+, Opera 15+ */
+
+    margin: 10px 4px;
+    padding: 0px 4px 16px 4px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+</style>
+<pre><code>
+// multitâche préemptif
+// avec des mutex dans toutes
+// les librairies Arduino...
+
+String line = "";
+
+
+
+void process_bloquant()
+{
+	String s = "";
+	for(;;) {
+		int c=getchar();
+		if(c==-1) {
+			delay(ms);
+			continue;
+		}
+		if(c=='\n') break;
+		s = s.concat(c);
+	}
+	line = s;
+}
+
+
+
+
+
+</code></pre>
+	</td>
+	<td>
+<pre><code>
+// multitâche coopératif
+// jm_Scheduler
+// méthode state...
+
+String line = "";
+
+int state = 0;
+
+void process_cyclique()
+{
+	static String s;
+	switch(state){
+	case 0:
+		s = "";
+		state++;
+		break;
+	case 1:
+		int c=getchar();
+		if(c==-1) break;
+		if(c!='\n') {
+			s = s.concat(c);
+			break;
+		}
+		line = s;
+		scheduler.stop();
+	}
+}
+</code></pre>
+	</td>
+	<td>
+<pre><code>
+// multitâche coopératif
+// jm_Scheduler
+// méthode jump...
+
+String line = "";
+
+String s;
+
+void process_cyclique() {
+	s = "";
+	scheduler.rearm(process_cycle_1);
+}
+
+
+
+
+void process_cycle_1() {
+	int c=getchar();
+	if(c==-1) return;
+	if(c!='\n') {
+		s = s.concat(c);
+		return;
+	}
+	line = s;
+	scheduler.stop();
+}
+
+</code></pre>
+	</td>
+</tr>
+	</table>
 	<p><a href="/fr/Arduino/libraries/jm_Scheduler/">La suite en exercice...</a>
 </div>
 
+
+
+<br />
+<br />
 <br />
 
+
+
 <div id="updated" class="container">
-	<div><small>Document mis à jour le 27.03.2018 10:49:29 UTC+02:00</small></div>
+	<div><small>Document mis à jour le 28.03.2018 15:38:52 UTC+02:00</small></div>
 </div>
+
+
 
 </body>
 </html>
