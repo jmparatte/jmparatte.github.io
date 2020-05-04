@@ -16,8 +16,8 @@ __urls_dico_merge({
 //------------------------------------------------------------------------------
 
 __menu = [
-	["Arduino, déverminage et multitâche",null],
-	["Arduino REST API, Windows Serial, PHP7 Serial",null]
+//	["refs.html",null],
+//	["workshops1-2-3-4.html","Ateliers 1 à 4"]
 ];
 
 //------------------------------------------------------------------------------
