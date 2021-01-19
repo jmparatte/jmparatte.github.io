@@ -1,4 +1,395 @@
-07.11.2020 20:12:17 UTC+01:00</small></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Librairie « multitâche coopératif » pour Arduino" />
+	<meta name="author" content="Jean-Marc Paratte" />
+	<link rel="icon" href="/jean-marc.ico" />
+
+	<title>jm_Scheduler</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+	<link rel="stylesheet" href="/global.css" />
+	<script src="/global.js"></script>
+	<script src="/fr/local.js"></script>
+	<script src="local.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+	<div>
+		<h1>jm_Scheduler</h1>
+		<p> &gt; <a href="/">Home</a> &gt; <a href="/fr/">Français</a> &gt; <a href="/fr/Arduino/">Arduino</a> &gt; <a href="/fr/Arduino/libraries/">Librairies</a> &gt; <a href="/fr/Arduino/libraries/jm_Scheduler/">jm_Scheduler</a></p>
+	</div>
+
+<img src="http://jean-marc.paratte.ch/wp-content/uploads/2013/01/diduino1_960x96.jpg" class="header-image" alt="jmP" height="68" width="680">
+<br />
+<br />
+
+<p>Révisions:
+
+<ul>
+<li>2018-02-08: v1.0.6 - Minor adjustments.
+<li>2017-10-17: v1.0.5 - Minor adjustments.
+<li>2017-05-08: v1.0.4 - Minor adjustments.
+<li>2017-05-08: v1.0.4 - Minor adjustments.
+<li>2017-05-05: v1.0.3 - Adding yield(),sleep(),rearm_async(). Removing void rearm(timestamp_t time, timestamp_t ival);
+<li>2017-04-26: v1.0.2 - Adding void rearm(timestamp_t time, timestamp_t ival);
+<li>2017-03-29: v1.0.1 - Minor adjustments.
+<li>2016-07-08: v1.0.0 - Initial commit.
+</ul>
+
+
+
+<h3>Librairie « Multitâche coopératif » pour Arduino</h3>
+
+<img src="/images/20180326_155231.jpg" style="margin-left:4px; width:8cm;" align="right">
+
+<p>Cette librairie est le fruit d'un questionnement lors d'un concours de robotique:
+Comment gérer et contrôler des processus parallèles et indépendants avec Arduino?
+
+<p>Sans librairie additionnelle, la réponse est assez complexe et nécessite une programmation délicate
+et coûteuse en effort de programmation: Chaque processus doit effectuer sa propre gestion cyclique
+dans la fonction <code>loop()</code>.
+
+<p>La réponse professionnelle serait sans doute l'usage de <code>RTOS</code> avec le modèle <code>multitâche préemptif</code>.
+Cela induit une complexité de programmation avec les librairies <var>non-réentrantes</var> d'Arduino
+ou avec la taille de stack très petite des Arduino Uno, Leonardo, etc....
+
+<p>Au final, le mode <code>multitâche coopératif</code> est bien plus approprié,
+à la manière de nombreux logiciels de programmation d'applications modernes
+comme <code>NodeJS</code>, <code>Python</code>, <code>Lua</code>...
+En plus d'offrir une gestion <code>multitâche coopératif</code> presque native,
+ces logiciels offrent également une gestion d'<code>événements</code>.
+Générer des <code>événements</code>, on peut le faire également avec la librairie <code>jm_Scheduler</code>.
+
+
+
+<h3>Concepts</h3>
+
+<p><code>jm_Scheduler</code> gère des <code>coroutines</code>
+activées et réactivées à la manière de la fonction JavaScript <code>setInterval()</code>,
+avec des fonctionnalités supplémentaires:</p>
+
+<ul>
+<li>Par défaut, <code>jm_Scheduler</code> démarre immédiatement la <code>coroutine</code> et la répète périodiquement.</li>
+<li>La première exécution peut être différée.</li>
+<li>Les exécutions répétées peuvent être annulées.</li>
+<li>Le temps de répétition peut être changé	 dynamiquement.</li>
+<li>La fonction de <code>coroutine</code> peut être changée dynamiquement.</li>
+<li>Une <code>coroutine</code> peut être stoppée et puis redémarrée ultérieurement.</li>
+<li>Une <code>coroutine</code> peut être <var>réveillée</var> par une routine d'interruption.</li>
+<li>A chaque <code>coroutine</code> est associé un <code>scheduler</code>.</li>
+<li>Le nombre de <code>schedulers</code> n'est limité que par la mémoire à disposition.
+</ul>
+
+<p>La librairie officielle <a href="https://www.arduino.cc/en/Reference/Scheduler"><code>Scheduler</code></a>
+ne fonctionne que pour les processeurs SAM et SAMD (Arduino Due et Zero) et
+planifie les tâches avec le modèle <code>préemptif</code>.
+<code>jm_Scheduler</code> planifie les tâches avec le modèle <code>coopératif</code>
+<b>POUR TOUS LES MODÈLES D'ARDUINO</b>, avec plus de fonctionnalités et
+avec <u>une gestion centralisée du temps des processus</u>.
+
+<p>La fonction <code>yield()</code> qui suspend une tâche est implémentée.
+
+<p>La fonction <code>startLoop()</code> de la librairie officielle Arduino n'est pas implémentée
+car elle n'est pas appropriée au principe du <code>multitâche coopératif</code>.
+
+<p><code>jm_Scheduler</code> exécute les <code>coroutines</code> séquentiellement sur le stack du processeur.
+
+<p>Les règles de <code>yield</code> et <code>resume</code> sont les suivantes:
+
+<ul>
+<li><code>yield</code> intervient immédiatement lorsque une <code>coroutine</code> prend fin (<code>return</code> final).<br \>
+Dans ce cas, la <code>coroutine</code> sera redémarrée cycliquement selon la valeur de répétition.
+<li><code>yield</code> peut être déclenché par l'appel de la fonction <code>yield()</code>.<br />
+Dans ce cas, la <code>coroutine</code> sera <var>résumée</var> dès que plus aucune <code>coroutine</code>
+ne demande une exécution immédiate.
+<li>Les <var>variables persistantes</var> des <code>coroutines</code> doivent être implémentées <code>globalement</code>
+ou à l'intérieur des <code>coroutines</code> en accolant le mot-clé <code>static</code> à la déclaration de la variable.
+</ul>
+
+
+
+<h3>Exemple basique</h3>
+
+<pre><code>
+// This example schedules a coroutine every second
+
+#include &lt;jm_Scheduler.h&gt;
+
+jm_Scheduler scheduler;
+
+void coroutine()
+{
+	Serial.print('.');
+}
+
+void setup(void)
+{
+	Serial.begin(9600);
+
+	scheduler.start(coroutine, TIMESTAMP_1SEC); // Start coroutine() immediately
+	// and repeat it every second
+}
+
+void loop(void)
+{
+	yield();
+}
+</code></pre>
+
+
+
+<h3>Plan d'étude</h3>
+
+<ul>
+<li>Commencez avec l'exemple <code>Clock1.ino</code>.
+Cet exemple démontre les avantages de démarrer immédiatement une <code>coroutine</code>
+d'affichage du temps avec une répétition périodique.
+<li>Poursuivez avec les exemples <code>Clock2.ino</code> et <code>Clock3.ino</code> qui présentent d'autres idées de comptage du temps.
+<li>L'exemple <code>Clock4.ino</code> présente une autre technique utile de <code>jm_Scheduler</code>:
+Changer dynamiquement de fonction de <code>coroutine</code>.
+<li>Les exemples <code>Beat1.ino</code> et <code>Beat2.ino</code> présentent les interactions possibles entre 2 <code>coroutines</code>.
+<li>L'exemple <code>Wakeup1.ino</code> démontre l'interaction possible entre une <code>routine d'interruption</code>
+et une <code>coroutine</code>, et en implémentant un <code>timeout</code> dans une <u>gestion d'événement</u>.
+</ul>
+
+
+
+<h3>Timestamp</h3>
+
+<ul>
+<li>Le <code>timestamp</code> (référence de temps) est généré par la fonction Arduino <code>micros()</code>.
+<li>Par design, la fonction Arduino <code>micros()</code> d'un UNO ou Leonardo fonctionnant à 16MHz
+retourne un <code>timestamp</code> avec une granularité de <code>[4us]</code>.
+<li>Enfin, <code>jm_Scheduler</code> ne requière aucun hardware spécifique, ni n'utilise aucune ressource dédiée.
+</ul>
+
+<p>La déclaration Arduino de la fonction <code>micros()</code> est la suivante:
+
+<pre><code>
+unsigned long micros();
+</code></pre>
+
+<p>Regardez dans les <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/">références Arduino <code>micros()</code></a> pour les détails de la fonction.
+
+<p><code>timestamp</code> est un compteur <code>32-bit</code> en <code>[us]</code>
+et redémarre à 0 environ toutes les 70 minutes (précisément 1h+11m+34s+967ms+296us).
+
+
+
+<h3>Déclaration et constantes Timestamp</h3>
+
+<pre><code>
+typedef uint32_t timestamp_t;
+
+#define timestamp_read() ((timestamp_t)micros())
+
+#define TIMESTAMP_DEAD (0x01CA0000) // <code>coroutine</code> dead time [30s + 15ms + 488us]
+#define TIMESTAMP_TMAX (0xFE35FFFF) // [1h + 11m + 4s + 951ms + 808us - 1]
+
+#define TIMESTAMP_1US	(1UL)					// [1us]
+#define TIMESTAMP_1MS	(1000*TIMESTAMP_1US)	// [1ms]
+#define TIMESTAMP_1SEC	(1000*TIMESTAMP_1MS)	// [1s]
+#define TIMESTAMP_1MIN	(60*TIMESTAMP_1SEC)		// [1 minute]
+#define TIMESTAMP_1HOUR	(60*TIMESTAMP_1MIN)		// [1 hour]
+</code></pre>
+
+<ul>
+
+<li><code>timestamp_t</code> est le type de toutes les valeurs <code>timestamp</code>.
+
+<li><code>timestamp_read()</code> retourne la valeur instantanée <code>timestamp</code>.
+Cette fonction peut aussi être utilisée dans les <code>routines d'interruption</code> pour dater leurs données.
+
+<li><code>TIMESTAMP_DEAD</code> est le temps d'exécution maximum d'une <code>coroutine</code>
+pour garantir un fonctionnement correct de <code>jm_Scheduler</code>.
+Si la <code>coroutine</code> ne prend pas fin avant cette valeur, alors <code>jm_Scheduler</code> peut perdre la synchronisation des tâches (voir ci-dessous).
+
+<li><code>TIMESTAMP_TMAX</code> est le temps maximum de planification d'une <code>coroutine</code>.
+En pratique, n'utilisez pas de valeur de <code>timestamp</code> plus grande qu'une heure.
+
+</ul>
+
+
+
+<h3>Méthodes jm_Scheduler</h3>
+
+<pre><code>
+// start <code>coroutine</code> immediately
+void start(voidfuncptr_t func);
+
+// start <code>coroutine</code> immediately and repeat it at fixed interval
+void start(voidfuncptr_t func, timestamp_t ival);
+
+// start <code>coroutine</code> on time and repeat it at fixed interval
+void start(voidfuncptr_t func, timestamp_t time, timestamp_t ival);
+
+// stop coroutine, current or scheduled, remove it from chain
+void stop();
+
+// rearm current <code>coroutine</code> and set or reset interval
+void rearm(timestamp_t ival);
+
+// rearm current coroutine, change <code>coroutine</code> function and set or reset interval
+void rearm(voidfuncptr_t func, timestamp_t ival);
+
+// rearm coroutine asynchronously and set interval
+void rearm_async(timestamp_t ival);
+
+// rearm coroutine asynchronously, change coroutine function and set interval
+void rearm_async(voidfuncptr_t func, timestamp_t ival);
+
+// wakeup a scheduled coroutine (maybe repeated)
+void wakeup();
+
+// wakeup a scheduled coroutine (maybe repeated but only 1st wakeup_time is recorded)
+void wakeup(uint32_t wakeup_time);
+
+// read wakeup count, reset it and remove coroutine from wakeup chain
+int wakeup_read();
+</code></pre>
+
+<ul>
+
+<li><code>start()</code> démarre une <code>coroutine</code>,
+immédiatement ou après une attente <var>time</var>,
+avec ou sans répétition <var>ival</var>.
+<code>start()</code> est en principe invoqué une fois ou
+lorsque la <code>coroutine</code> est stoppée.
+<code>rearm()</code> permet de changer les données du <var>scheduler</var> lorsque la <code>coroutine</code> est en exécution.
+
+<li><code>stop()</code> interrompt toutes nouvelles exécutions d'une <code>coroutine</code>.
+<code>stop()</code> peut être invoqué par la <code>coroutine</code> en exécution ou par d'autres processus.
+Lorsque <code>stop()</code> est invoqué par la <code>coroutine</code> en exécution,
+<code>stop()</code> ne provoque pas l'arrêt immédiat de la <code>coroutine</code>,
+<code>stop()</code> suspend simplement les exécutions suivantes.
+Pour stopper immédiatement une <code>coroutine</code>,
+la <code>coroutine</code> doit invoquer <code>stop()</code> puis effectuer un <var>return</var>.
+
+<li><code>rearm()</code> change les consignes de la variable <var>scheduler</var>.
+Les nouvelles valeurs pendront effet à la fin d'exécution de la <code>coroutine</code>.
+<code>rearm()</code> permet de changer l'intervalle d'exécution
+ou de changer la fonction <code>coroutine</code>.
+L'exécution de la prochaine instance de la <code>coroutine</code> sera déclenchée
+de manière synchrone en additionnant <code>ival</code> au temps de déclenchement de l'instance précédente.
+
+<li><code>rearm_async()</code> change les consignes de la variable <var>scheduler</var>.
+Les nouvelles valeurs pendront effet à la fin d'exécution de la <code>coroutine</code>.
+<code>rearm_async()</code> permet de changer l'intervalle de déclenchement de la prochaine instance,
+et en option de changer la fonction <code>coroutine</code>.
+L'exécution de la prochaine instance de la <code>coroutine</code> sera déclenchée
+de manière asynchrone en additionnant <code>ival</code> au temps de fin d'exécution de l'instance précédente.
+
+<li><code>wakeup()</code> <var>réveille</var> une <code>coroutine</code> en attente d'exécution.
+Le nombre de <var>réveils</var> est comptabilisé.
+<code>wakeup_read()</code> lit le compteur puis le réinitialise.
+<code>wakeup()</code> peut être invoqué depuis une routine d'interruption.
+<code>wakeup_read()</code> ne doit être invoqué que depuis la <code>coroutine</code> <var>réveillée</var>.
+
+</ul>
+
+
+
+<h3>Arduino loop() et yield()</h3>
+
+<p>Le contrôle du <var>scheduler</var> implique au minimum la mise en place de la fonction <code>yield()</code>
+dans la fonction Arduino <code>loop()</code>.</p>
+
+<p>Déclaration de la fonction <code>yield()</code>:
+<pre><code>
+static void yield();
+</code></pre>
+
+<p><code>yield()</code> est la <var>pierre angulaire</var> du <var>scheduler</var>. Elle doit être invoquée aussi souvent que possible.
+Prenez note que <code>yield()</code> est une <var>méthode statique</var> de la librairie <code>jm_Scheduler</code>.
+Elle remplace la fonction <var>weak</var> native d'Arduino.</p>
+
+<p>Le bon endroit pour invoquer <code>yield()</code> est dans la fonction Arduino <code>loop()</code>.
+<p>Exemple:
+
+<pre><code>
+void setup()
+{
+	// ...
+}
+
+void loop()
+{
+	yield();
+
+	// ...
+}
+</code></pre>
+
+<p><code>yield()</code> peut aussi être invoqué dans la fonction Arduino <code>setup()</code>.
+<p>Exemple:
+
+<pre><code>
+void setup(void)
+{
+	// here, some jm_Scheduler variables initialized...
+
+	Serial.begin(9600);
+	while (!Serial)
+	{
+		// wait for USB Serial ready...
+
+		yield(); // split loop while()...
+	}
+
+
+	yield(); // split long setup()...
+
+	// continue setup()...
+}
+</code></pre>
+
+<p>Remarques:
+<ul>
+<li><code>yield()</code> peut aussi être invoqué depuis une <code>coroutine</code>.
+<li><code>yield()</code> est automatiquement invoqué dans la fonction Arduino <code>delay()</code>.
+</ul>
+
+
+
+<h3>Bonnes pratiques de <var>scheduling</var></h3>
+
+<p>Pour garantir la bonne exécution de toutes les tâches coopératives,
+le temps d'exécution des <code>coroutines</code> doit être le plus court possible.
+Cette pratique est identique à celle d'une <code>routine d'interruption</code>.
+
+<p>Utilisez la fonction Arduino <code>delay()</code> pour mettre en pause une <code>coroutine</code>
+ou la fonction <code>yield()</code> pour fractionner l'exécution d'une <code>coroutine</code>.
+
+<p>Une meilleure pratique est de fractionner le code d'une <code>coroutine</code> en plusieurs <code>coroutines</code>.
+Les méthodes <code>jm_Scheduler</code> <code>rearm()</code> et <code>rearm_async()</code>
+permettent de sérialiser l'exécution de plusieurs <code>coroutines</code>.
+
+
+
+<h3>Changer le <var>Timestamp</var></h3>
+
+<p>Ci-dessous sont listés quelques <var>hacks</var> qui peuvent être implémentés en modifiant le fichier <code>jm_Scheduler.h</code>:
+
+<ul>
+<li>Une autre source de <code>timestamp</code> peut être la fonction Arduino <code>millis()</code> en remplacement de <code>micros()</code>.
+<li>Un gain en vitesse appréciable peut être généré en réduisant la taille du <code>timestamp</code> à <code>16-bit</code>.
+De cette manière, toutes les comparaisons de <code>timestamp</code> seront accélérées avec un Arduino UNO ou Leonardo.
+<li>On peut obtenir une plus longue périodicité en implémentant un <code>timestamp</code> de <code>64-bit</code>.
+</ul>
+
+	<div><small>Document mis à jour le 19.01.2021 10:14:49 UTC+01:00</small></div>
 
 </div>
 
