@@ -29,12 +29,94 @@
 
 	<h3>MinGW-W64 - GCC for Windows 64 & 32 bits</h3>
 
-	<h6>Documents source du projet</h6>
+	<h6>Liens</h6>
 	<ul>
-		<li><a href="https://github.com/jmparatte/e230">Installation MinGW-W64</a>
+		<li><a href="http://mingw-w64.org/doku.php">Page de présentation du projet <b>MinGW-W64</b></a>
+		<li><a href="http://mingw-w64.org/doku.php/download">Page des téléchargements disponibles <b>MinGW-W64</b></a>
+		<!--li><a href="http://mingw-w64.org/doku.php/download/mingw-builds">Téléchargement de la <i>toolchains</i> <b>Win-builds</b></a-->
+		<li><a href="http://sf.net/projects/mingw-w64/files/">Page des téléchargements <b>MinGW-W64</b> via <b>SourceForge</b></a>
+		<li><a href="https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe">Téléchargement de <b>MinGW-W64 Online Installer</b> via <b>SourceForge</b></a>
 	</ul>
 
-	<div><small>Document mis à jour le 09.03.2021 17:33:36 UTC+01:00</small></div>
+	<h3>Installation de MinGW-W64</h3>
+
+	<p>L'installation démarre en mettant en exécution le programme téléchargé <b>mingw-w64-install.exe</b>.
+
+	<ul>
+		<li><a href="#">Démarrer le programme <b>mingw-w64-install.exe</b></a>
+		<p>&#128161; Copier la ligne de commande <code>%USERPROFILE%\downloads\mingw-w64-install.exe</code> dans la zone de recherche (barre des tâches de Windows) et valider.
+		<p><img src="mingw-w64-install_exe_1.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<p>
+		<p><img src="mingw-w64-install_exe_2.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<p>
+		<p><img src="mingw-w64-install_exe_3.png">
+
+		<li><a href="#">Copier le chemin d'installation <b>Destination folder</b></a>
+		<code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0</code>
+		et le coller dans une fenêtre de navigation <b>Explorateur de fichiers</b>, cela sera utile plus tard.
+
+		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<p>
+		<p><img src="mingw-w64-install_exe_4.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<p>
+		<p><img src="mingw-w64-install_exe_5.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>Finish</b>.</a>
+		<p>
+	</ul>
+
+	<h3>Création de la variable d'environnement MINGW32_BIN</h3>
+
+	<p>La variable d'environnement <code>MINGW32_BIN</code> à créer contiendra le chemin vers les compilateurs <code>GCC</code> et <code>G++</code>, et vers les utilitaires GNU tel que <code>make</code>, etc...
+
+	<ul>
+		<li><a href="#">Ouvrir un <b>Explorateur de fichiers</b></a>
+		<li><a href="#">Naviguer dans le chemin d'installation de <b>MinGW-W64</b> précédemment copié...</a>
+		<p>
+		<p><img src="mingw-w64-install_exe_6.png" style="width: 640px; border:1px solid black; overflow: hidden;">
+
+		<li><a href="#">Naviguer dans <b>mingw32</b> puis <b>bin</b></a>
+		<p>
+		<p><img src="mingw-w64-install_exe_7.png" style="width: 640px; border:1px solid black; overflow: hidden;">
+		<p>Le chemin complet jusqu'à <b>bin</b> sera copié dans la variable d'environnement <code>MINGW32_BIN</code> à créer:
+		<code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin</code>
+
+		<li><a href="#">Ouvrir les <b>Propriétés système</b> du <b>Panneau de configuration</b> pour accéder aux <b>Variables d'environnement</b></a>
+		<p>&#128161; Copier <code>Modifier les variables d’environnement système</code> dans la zone de recherche (barre des tâches de Windows) et valider.
+		<p><img src="mingw-w64-install_exe_8.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>Variables d'environnement...</b></a>
+		<li><a href="#">Cliquer sur le bouton <b>Nouvelle...</b> dans la section des <b>Variables système</b></a>
+		<li><a href="#">Saisir le <b>Nom de la variable</b></a> <code>MINGW32_BIN</code>
+		<li><a href="#">Saisir la <b>Valeur de la variable</b></a> <code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin</code>
+		<p>
+		<p><img src="mingw-w64-install_exe_9.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>OK</b> pour valider la saisie.</a>
+
+		<li><a href="#">Cliquer sur le bouton <b>OK</b> pour fermer la boîte de dialogue.</a>
+	</ul>
+
+	<h3>Vérification du compilateur GCC</h3>
+
+	<p>Cette vérification confirmera l'accès au compilateur GCC par la variable d'environnement <code>MINGW32_BIN</code>.
+
+	<ul>
+		<li><a href="#">Ouvrir une <b>Invite de commandes</b></a>
+		<p>&#128161; Taper <code>CMD</code> dans la zone de recherche (barre des tâches de Windows) et valider.
+		<li><a href="#">Taper la commande</a> <code>"%MINGW32_BIN%\gcc.exe" -v</code> et valider.
+		<p>
+		<p><img src="mingw-w64-install_exe_10.png" style="width: 640px;">
+		<p>La dernière ligne affiche la version du compilateur, actuellement <b>8.1.0</b>.
+	</ul>
+
+	<div><small>Document mis à jour le 10.03.2021 15:14:20 UTC+01:00</small></div>
 
 </div>
 
