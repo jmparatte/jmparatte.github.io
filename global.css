@@ -104,6 +104,11 @@ pre {
     border-radius: 10px;
 }
 
+code {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
 @media print {
   @page {
     size: A4 portrait;

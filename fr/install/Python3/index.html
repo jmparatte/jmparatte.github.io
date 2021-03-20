@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Installation Python3." />
+	<meta name="author" content="Jean-Marc Paratte" />
+	<link rel="icon" href="/jean-marc.ico" />
+
+	<title>Installation Python 3</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+	<link rel="stylesheet" href="/global.css" />
+	<script src="/global.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+	<h1>Installation Python 3</h1>
+	<p> &gt; <a href="/">Home</a> &gt; <a href="/fr/">Français</a> &gt; <a href="/fr/install/">Installation</a> &gt; <a href="/fr/install/Python3/">Python3</a></p>
+
+	<h3>Python 3 for Windows</h3>
+
+	<h6>Liens</h6>
+	<ul>
+		<li><a href="https://www.python.org/">Page de présentation du programme <b>Python</b></a>
+		<li><a href="https://www.python.org/downloads/">Page des téléchargements <b>Python</b></a>
+		<li><a href="https://www.python.org/downloads/windows/">Page des téléchargements <b>Python Releases for Windows</b></a>
+		<li><a href="https://www.python.org/ftp/python/">Page des téléchargements FTP <b>Index of /ftp/python/</b></a>
+	</ul>
+
+	<h3>Téléchargement de Python 3</h3>
+
+	<p>Le téléchargement est effectué depuis la <a href="https://www.python.org/downloads/windows/">Page des téléchargements <b>Python Releases for Windows</b></a>.
+	<p><img src="python-3.9.2-amd64.exe_1.png" style="width: 640px; border:1px solid black;">
+
+	<ul>
+		<li><a href="#">Identifier la section <b>Stable Releases</b> dans la colonne de gauche</a>
+		<li><a href="#">Cliquer le lien <b>Download Windows installer (64-bit)</b> au bas de la section</a>
+	</ul>
+
+	<h3>Installation de Python 3</h3>
+
+	<p>L'installation démarre en mettant en exécution le programme téléchargé <b>python-3.9.2-amd64.exe</b> (ou une version plus récente, 3.9.2 au moment de la rédaction de cette page).
+
+	<ul>
+		<li><a href="#">Démarrer le programme <b>python-3.9.2-amd64.exe</b></a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_2.png" style="width: 640px;">
+		<p>
+		<u>Remarques:</u>
+		<ol>
+			<li><a href="#">Install Now</a> installera Python 3 uniquement pour l'utilisateur en cours.</a>
+			<li><a href="#">Install laucher for all users (recommended)</a> ne sera pas installé.
+			<li><a href="#">add Python 3 to PATH</a> désélectionné ne sera pas inscrit.</a>
+		</ol>
+		<p>Les valeurs par défaut proposées par l'installateur sont recommandées car la confusion des versions Python 2 et 3 pourraient être une source de dérangements pour d'autres applications Python.
+
+		<li><a href="#">Cliquer sur le bouton <b>Install Now</b> pour poursuivre automatiquement l'installation...</a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_3.png">
+
+		<li><a href="#">Cliquer sur le bouton <b>Close</b> pour achever l'installation.</a>
+		<p>
+	</ul>
+
+	<h3>Création de la variable d'environnement PYTHON3_EXE</h3>
+
+	<p>La variable d'environnement <code>PYTHON3_EXE</code> indique la version appropriée de Python à utiliser dans les scripts, etc.
+
+	<ul>
+		<li><a href="#">Copier <b>Python 3.9 (64-bit)</b> dans la zone de recherche Windows...</a>
+		<p>(Écrire <code>Python 3</code> dans la zone de recherche est suffisant.)
+		<p><img src="python-3.9.2-amd64.exe_4a.png" style="width: 640px;">
+
+		<li><a href="#">Cliquer la commande <b>Ouvrir l'emplacement du fichier</b>...</a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_6.png" style="width: 640px; border:1px solid black;">
+
+		<li><a href="#">Afficher les propriétés de <b>Python 3.9 (64-bit)</b>...</a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_7.png">
+
+		<li><a href="#">Copier le chemin <b>Démarrer dans</b> et le coller dans un <b>Explorateur de fichiers</b>...</a>
+		<p>
+
+		<p><img src="python-3.9.2-amd64.exe_8.png" style="width: 640px; border:1px solid black;">
+
+		<li><a href="#">Taper la commande</a> <code>cmd.exe /k "SET PYTHON3_EXE=%CD%\python.exe&SET PYTHON3_EXE"</code> <a href="#">dans la zone d'adresse et exécuter...</a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_9.png" style="width: 640px; border:1px solid black;">
+
+		<li><a href="#">Une <b>Invite de commandes</b> s'ouvre et affiche le résultat de la commande:</a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_10.png" style="width: 640px;">
+
+		<li><a href="#">Taper la commande</a> <code>%PYTHON3_EXE%</code> <a href="#">pour vérifier le démarrage de Python 3...</a>
+		<p>
+		<p><img src="python-3.9.2-amd64.exe_11.png" style="width: 640px;">
+		<p>Le programme <b>Python</b> démarre et affiche la version, actuellement <b>3.9.2</b>.
+
+		<li><a href="#">Taper</a> <code>Ctrl-Z</code> <a href="#">puis la commande</a> <code>exit</code> <a href="#">pour fermer l'invite de commandes</a>.
+	</ul>
+
+	<div><small>Document mis à jour le 20.03.2021 17:48:05 UTC+01:00</small></div>
+
+</div>
+
+</body>
+</html>
