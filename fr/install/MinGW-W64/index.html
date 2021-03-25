@@ -19,6 +19,16 @@
 	<link rel="stylesheet" href="/global.css" />
 	<script src="/global.js"></script>
 
+<style>
+	body {
+		counter-reset: h3counter;
+	}
+	h3:before {
+		content: counter(h3counter) ".\0000a0\0000a0";
+		counter-increment: h3counter;
+	}
+</style>
+
 </head>
 <body>
 
@@ -30,106 +40,105 @@
 	<h3>MinGW-W64 - GCC for Windows 64 & 32 bits</h3>
 
 	<h6>Liens</h6>
-	<ul>
+	<ol>
 		<li><a href="http://mingw-w64.org/doku.php">Page de présentation du projet <b>MinGW-W64</b></a>
 		<li><a href="http://mingw-w64.org/doku.php/download">Page des téléchargements disponibles <b>MinGW-W64</b></a>
-		<!--li><a href="http://mingw-w64.org/doku.php/download/mingw-builds">Téléchargement de la <i>toolchains</i> <b>Win-builds</b></a-->
 		<li><a href="http://sf.net/projects/mingw-w64/files/">Page des téléchargements <b>MinGW-W64</b> via <b>SourceForge</b></a>
 		<li><a href="https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe">Téléchargement de <b>MinGW-W64 Online Installer</b> via <b>SourceForge</b></a>
-	</ul>
+	</ol>
 
 	<h3>Installation de MinGW-W64</h3>
 
 	<p>L'installation démarre en mettant en exécution le programme téléchargé <b>mingw-w64-install.exe</b>.
 
-	<ul>
-		<li><a href="#">Démarrer le programme <b>mingw-w64-install.exe</b></a>
+	<ol>
+		<li>Démarrer le programme <b>mingw-w64-install.exe</b>:
 		<p>&#128161; Copier la ligne de commande <code>%USERPROFILE%\downloads\mingw-w64-install.exe</code> dans la zone de recherche (barre des tâches de Windows) et valider.
 		<p><img src="mingw-w64-install_exe_1.png">
 
-		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<li>Cliquer sur le bouton <b>Next &gt;</b>:
 		<p>
 		<p><img src="mingw-w64-install_exe_2.png">
 
-		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<li>Cliquer sur le bouton <b>Next &gt;</b>:
 		<p>
 		<p><img src="mingw-w64-install_exe_3.png">
 
-		<li><a href="#">Copier le chemin d'installation <b>Destination folder</b></a>
+		<li>Copier le chemin d'installation <b>Destination folder</b>
 		<code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0</code>
 		et le coller dans une fenêtre de navigation <b>Explorateur de fichiers</b>, cela sera utile plus tard.
 
-		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<li>Cliquer sur le bouton <b>Next &gt;</b>:
 		<p>
 		<p><img src="mingw-w64-install_exe_4.png">
 
-		<li><a href="#">Cliquer sur le bouton <b>Next &gt;</b>, poursuivre l'installation...</a>
+		<li>Cliquer sur le bouton <b>Next &gt;</b>:
 		<p>
 		<p><img src="mingw-w64-install_exe_5.png">
 
-		<li><a href="#">Cliquer sur le bouton <b>Finish</b>.</a>
+		<li>Cliquer sur le bouton <b>Finish</b>.
 		<p>
-	</ul>
+	</ol>
 
 	<h3>Création de la variable d'environnement MINGW32_BIN</h3>
 
-	<p>La variable d'environnement <code>MINGW32_BIN</code> à créer contiendra le chemin vers les compilateurs <code>GCC</code> et <code>G++</code>, et vers les utilitaires GNU tel que <code>make</code>, etc...
+	<p>La variable d'environnement <code>MINGW32_BIN</code> à créer contiendra le chemin vers les compilateurs <code>GCC</code> et <code>G++</code>,
+	et vers les utilitaires GNU <code>make</code>, etc.
 
-	<ul>
-		<li><a href="#">Ouvrir un <b>Explorateur de fichiers</b></a>
-		<li><a href="#">Naviguer dans le chemin d'installation de <b>MinGW-W64</b> précédemment copié...</a>
+	<ol>
+		<li>Ouvrir un <b>Explorateur de fichiers</b>,
+		<li>Naviguer dans le chemin d'installation de <b>MinGW-W64</b> précédemment copié:
 		<p>
 		<p><img src="mingw-w64-install_exe_6.png" style="width: 640px; border:1px solid black; overflow: hidden;">
 
-		<li><a href="#">Naviguer dans <b>mingw32</b> puis <b>bin</b></a>
+		<li>Naviguer dans <b>mingw32</b> puis <b>bin</b>:
 		<p>
 		<p><img src="mingw-w64-install_exe_7.png" style="width: 640px; border:1px solid black; overflow: hidden;">
 		<p>Le chemin complet jusqu'à <b>bin</b> sera copié dans la variable d'environnement <code>MINGW32_BIN</code> à créer:
 		<code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin</code>
 
-		<!--li><a href="#">Ouvrir les <b>Propriétés système</b> pour accéder aux <b>Variables d'environnement</b></a-->
-		<li><a href="#">Ouvrir les <b>Paramètres</b> Windows</a>
-		<li><a href="#">Depuis la page d' <b>Accueil</b>, sélectionner la page <b>Système</b></a>
-		<li><a href="#">Depuis la page d' <b>Système</b>, sélectionner sur la gauche l'index <b>À propos de</b></a>
-		<li><a href="#">Sur la droite dans la rubrique <b>Paramètres associés</b>, cliquer sur la commande <b>Paramètres avancés du système</b></a>
-		<p>(Cette commande ouvre directement la boîte de dialogue <b>Propriétés système</b>.)
+		<li>Ouvrir les <b>Paramètres</b> Windows.
+		<li>Depuis la page d' <b>Accueil</b>, sélectionner la page <b>Système</b>.
+		<li>Depuis la page d' <b>Système</b>, sélectionner sur la gauche l'index <b>À propos de</b>.
+		<li>Sur la droite dans la rubrique <b>Paramètres associés</b>, cliquer sur la commande <b>Paramètres avancés du système</b>
+		(Cette commande ouvre directement la boîte de dialogue <b>Propriétés système</b>).
 
-		<li><a href="#">&#128161; ou par la recherche Windows, c'est plus rapide</a>
-		<li><a href="#">Copier <b>Modifier les variables d’environnement système</b> dans la zone de recherche Windows</a>.
+		<li>&#128161; ou par la recherche Windows, c'est plus rapide.
+		<li>Copier <b>Modifier les variables d’environnement système</b> dans la zone de recherche Windows:
 		<p>(Écrire <code>var</code> ou <code>env</code> dans la zone de recherche est suffisant.)
-		<p><img src="Modifier les variables d'environnement système.png" style="width: 640px; border:1px solid black; overflow: hidden;">
+		<p><img src="Modifier les variables d'environnement système.png" style="width: 640px; border:1px solid black;">
 		<p>(Cette recherche ouvre directement la boîte de dialogue <b>Propriétés système</b>.)
 
-		<li><a href="#">Depuis <b>Propriétés système</b>, modifier les <b>Variables d'environnement</b></a>
+		<li>Depuis <b>Propriétés système</b>, modifier les <b>Variables d'environnement</b>:
 		<p>
 		<p><img src="mingw-w64-install_exe_8.png">
 
-		<li><a href="#">Cliquer sur le bouton <b>Variables d'environnement...</b></a>
-		<li><a href="#">Cliquer sur le bouton <b>Nouvelle...</b> dans la section des <b>Variables système</b></a>
-		<li><a href="#">Saisir le <b>Nom de la variable</b></a> <code>MINGW32_BIN</code>
-		<li><a href="#">Saisir la <b>Valeur de la variable</b></a> <code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin</code>
+		<li>Cliquer sur le bouton <b>Variables d'environnement</b>,
+		<li>Cliquer sur le bouton <b>Nouvelle...</b> dans la section des <b>Variables système</b>,
+		<li>Saisir le <b>Nom de la variable</b> <code>MINGW32_BIN</code>
+		<li>Saisir la <b>Valeur de la variable</b> <code>C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin</code>:
 		<p>
 		<p><img src="mingw-w64-install_exe_9.png">
 
-		<li><a href="#">Cliquer sur le bouton <b>OK</b> pour valider la saisie.</a>
+		<li>Cliquer sur le bouton <b>OK</b> pour valider la saisie.
 
-		<li><a href="#">Cliquer sur le bouton <b>OK</b> pour fermer la boîte de dialogue.</a>
-	</ul>
+		<li>Cliquer sur le bouton <b>OK</b> pour fermer la boîte de dialogue.
+	</ol>
 
 	<h3>Vérification du compilateur GCC</h3>
 
 	<p>Cette vérification confirmera l'accès au compilateur GCC par la variable d'environnement <code>MINGW32_BIN</code>.
 
-	<ul>
-		<li><a href="#">Ouvrir une <b>Invite de commandes</b></a>
+	<ol>
+		<li>Ouvrir une <b>Invite de commandes</b>.
 		<p>&#128161; Taper <code>CMD</code> dans la zone de recherche (barre des tâches de Windows) et valider.
-		<li><a href="#">Taper la commande</a> <code>"%MINGW32_BIN%\gcc.exe" -v</code> et valider.
+		<li>Taper la commande <code>"%MINGW32_BIN%\gcc.exe" -v</code> et valider:
 		<p>
 		<p><img src="mingw-w64-install_exe_10.png" style="width: 640px;">
 		<p>La dernière ligne affiche la version du compilateur, actuellement <b>8.1.0</b>.
-	</ul>
+	</ol>
 
-	<div><small>Document mis à jour le 20.03.2021 18:01:31 UTC+01:00</small></div>
+	<div><small>Document mis à jour le 25.03.2021 16:15:14 UTC+01:00</small></div>
 
 </div>
 
